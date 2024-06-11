@@ -46,6 +46,7 @@ export const register = async (req, res) => {
 /* LOGGING IN */
 export const login = async (req, res) => {
   try {
+    const JWT_VALIDITY = '7 days';
     const { email, password } = req.body;
     const user = await Admin.findOne({ email: email });
     if (!user) return res.status(400).json({ msg: "User does not exist. " });
@@ -53,10 +54,12 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{
+      expiresIn: JWT_VALIDITY,
+    });
     delete user.password;
-    res.status(200).json({ token, user });
+    res.status(200).json({ accessToken, user });
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
+  } 
 };

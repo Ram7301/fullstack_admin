@@ -10,6 +10,7 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import authRoutes from "./routes/auth.js";
 import salesRoutes from "./routes/sales.js";
+// import booksRoutes from "./routes/books.js";
 import path from "path";
 import  { fileURLToPath} from "url";
 import multer from "multer"
@@ -21,7 +22,7 @@ import Listview from "./modles/Listview.js";
 import Product from "./modles/Product.js";
 import ProductStat from "./modles/ProductStat.js";
 import Transaction from "./modles/Transaction.js";
-import { dataUser ,dataProduct, dataProductStat, dataTransaction} from "./data/index.js"
+import {dataUser, dataProduct, dataProductStat, dataTransaction } from "./data/index.js"
 
 
 
@@ -35,7 +36,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
-app.use(bodyParser.json({limit:"30mb",extended:"true"}));
+app.use(bodyParser.json({limit:"30mb",extended:true}));
 app.use(bodyParser.urlencoded({ limit:"30mb",extended: false }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
@@ -53,58 +54,19 @@ const upload = multer({storage});
 
 
 /* ROUTES */
+// app.use("/tests",booksRoutes)
+
+
 app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
-app.use("/management", managementRoutes);
+app.use("/management", managementRoutes) ;
 app.use("/sales", salesRoutes);
 app.use("/auth", authRoutes);
+app.post("/auth/register",upload.single("picture"),register) 
 
 
-app.post("/auth/register",upload.single("picture"),register)
 
-const Admin =[
-//   {
-//   listViewName:"Admin",
-//   Data:{
-//     columns:[{
-//       field:"name",
-//       headerName:"name",
-//       flex:1
 
-//     }
-//     ],
-//     rows:[{
-//       firstName:"Ram",
-//       lastName:"Prakash",
-//       email:"ram@gmail.com",
-//       password:"123",
-//     },
-    
-//   ]
-//   } ,
-  
-  
-// },
-{
-  listViewName:"User",
-  Data:{
-    columns:[
-      {
-        field:"data",
-        headerName:"data",
-        flex:1
-      }
-    ],
-    rows:[{
-      firstName:"data",
-      lastName:"data",
-      email:"data@gmail.com",
-      password:"321"
-    }]
-  }
-}
-
-]
 
   
 
